@@ -11,3 +11,5 @@ A WIP app for managing multiple Proxmox nodes on your system from a desktop opti
 - support for Proxmox Backup Server
 - desktop-y features like native menus, notifications, pre-connect commands (for VPNs and whatnot), maybe discord RPC
 - iDRAC Redfish support long term?? maybe??
+
+Linux support first, anything else is just a plus but hopefully building off React should make things easy
