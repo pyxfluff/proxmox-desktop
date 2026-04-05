@@ -34,3 +34,8 @@ yarn.lock
 
 # bun stuff
 bun.lock
+
+# Python
+backend.egg-info
+build
+*.pyc
