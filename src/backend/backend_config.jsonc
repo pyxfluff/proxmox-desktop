@@ -1,3 +1,5 @@
 {
-    "dev": true
+    "dev": true,
+    "keyring.name": "CredStore",
+    "keyring.user": "admin"
 }
