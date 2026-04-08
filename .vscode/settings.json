@@ -9,5 +9,15 @@
       ],
       "url": "https://json.schemastore.org/electron-builder"
     }
-  ]
+],
+"python-envs.pythonProjects": [
+    {
+        "path": "src/backend/lib/pmx",
+        "envManager": "ms-python.python:venv",
+        "packageManager": "ms-python.python:pip"
+    }
+],
+"cSpell.words": [
+    "PVEAPI"
+]
 }

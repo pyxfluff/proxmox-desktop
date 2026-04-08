@@ -39,3 +39,6 @@ bun.lock
 backend.egg-info
 build
 *.pyc
+
+# Project files
+src/backend/lib/pmx/Store

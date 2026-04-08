@@ -10,7 +10,11 @@ from fastapi import FastAPI
 
 console = Console(force_terminal=True)
 
-console.print("[yellow]Backend worker starting, loading AppConfig model[/]")
+from .lib.logger import Logger
+
+log = Logger("InitThread")
+
+log.warn("Backend worker starting, loading AppConfig model")
 
 
 # load config
@@ -29,41 +33,35 @@ class AppConfig:
 
                 setattr(obj, k.split(".")[-1], v)
         except FileNotFoundError:
-            console.print(
-                "[red]App config not found. Please make sure backend_config.jsonc exists.[/]"
+            log.error(
+                "App config not found. Please make sure backend_config.jsonc exists."
             )
             exit(1)
 
-    def get_keyring(self):
+    def get_server_key(self, hostname):
+        log.log(f"Accessing keyring prop={hostname}")
+
         return orjson.loads(
             keyring.get_password(
-                f"proxmox_desktop_{self.keyring.name}", self.keyring.user
+                f"proxmox_desktop_{self.keyring.name}", hostname  # type: ignore
             )
-            or '{"is_initialized": false}'
+            or '{"found": false}'
         )
 
-    def add_server_to_keyring(
-        self, hostname: str, endpoint: str, token: str, secret: str
-    ):
-        ring = self.get_keyring()
+    def add_server_to_keyring(self, hostname: str, secret: str):
+        log.log(f"Setting keyring prop={hostname}")
+        keyring.set_password(
+            f"proxmox_desktop_{self.keyring.name}", hostname, orjson.dumps({"found": True, "key": secret}).decode()  # type: ignore
+        )
 
-        if ring["is_initialized"] == False:
-            ring = {"is_initialized": True, "servers": {}, "_version": 1}
-
-        ring["servers"][hostname] = {
-            "endpoint": endpoint,
-            "token": token,
-            "secret": secret
-        }
-
-        keyring.set_password(f"proxmox_desktop_{self.keyring.name}", self.keyring.user, orjson.dumps(ring).decode())
+        return True
 
 
 config = AppConfig()
 
-console.print("[yellow]Initializing FastAPI[/]")
+log.warn("Initializing FastAPI")
 
 app = FastAPI(debug=True, title="Proxmox Desktop", description="Backend API wrapper")
 
 
-console.print("[green]App loaded, handing off[/]")
+log.success("App loaded, handing off")

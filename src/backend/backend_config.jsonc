@@ -1,5 +1,6 @@
 {
     "dev": true,
     "keyring.name": "CredStore",
-    "keyring.user": "admin"
+    "keyring.user": "admin",
+    "ssl.ignore": true
 }
